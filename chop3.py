@@ -13,6 +13,8 @@ import glob
 import os
 
 
+
+
 def ratio(zvec, signal):
     """Calculates the ratio between the number of zvec and signal samples."""
     
@@ -72,19 +74,8 @@ def chop(zvec_resampled, signal, newpositions):
             
     return sign
     
-#def plot (sign):
-#    """Plots the signal values and a heatmap from one ROI for all the runs"""
-#    
-#    i=0
-#    for array in sign:
-#        plt.subplot(len(sign)+1, 1, i+1)
-#        plt.plot(sign[i])
-#        i+=1
-#    
-#    plt.subplot(len(sign)+1, 1, i+1)
-#    plt.imshow(sign, aspect="auto")
-#
-#
+
+
 
 if __name__ == "__main__":
     #pathname = 'C:/Users/robacha/Desktop/chop'
@@ -115,29 +106,52 @@ if __name__ == "__main__":
         signal_array.append(np.genfromtxt(file_path, delimiter='\t', skip_header = 1))
         
         
-        
-    roiid = int(raw_input("Which ROI would you like to analyse?\n>>> "))
     
     ratio_array = []
     for a, b in zip(signal_array, zvec_array):
         #or b in zvec_array:
-            ratio_array.append(ratio(b, a))
-            
+           ratio_array.append(ratio(b, a))
+                   
     positions_array = []
     for b, ratio in zip(zvec_array, ratio_array):
         #for ratio in ratio_array:
             positions_array.append(get_positions(b, ratio))
-            
+                    
     zvec_resampled_array = []  
     for a, b in zip(signal_array, zvec_array):
         #for b in zvec_array:
-            zvec_resampled_array.append(resample(b, a))
+           zvec_resampled_array.append(resample(b, a))
+            
     
+    #roiid = int(raw_input("Which ROI would you like to analyse?\n>>> "))
+    i = range(0,50)
+    c = 1
     
-    chopped_array= []
-    for zvec, signal, positions in zip(zvec_resampled_array, signal_array, positions_array):
-        chopped_array.append(chop(zvec, signal, positions))
+    for number in i:
+        roiid = c
+         
+        chopped_array= []
+        for zvec, signal, positions in zip(zvec_resampled_array, signal_array, positions_array):
+            chopped_array.append(chop(zvec, signal, positions))
+                
+        list_of_runs = []
+        for a in chopped_array:
+            for b in a:
+                list_of_runs.append(b)
+                    
+        #plt.imshow(list_of_runs, aspect="auto")
+            
+        plt.imshow(list_of_runs, aspect="auto") 
+        folderName = 'C:/Users/robacha/Desktop/corridor/chop/heat'
+        #os.makedirs(folderName)
+        plt.savefig(os.path.join(folderName, 'heatmap_' + str(roiid) + '.jpg'))
+        plt.close('all')
         
+        c+=1
+                
+    
+        
+    
     #plot(sign)
     
     
