@@ -124,7 +124,7 @@ if __name__ == "__main__":
             
     
     #roiid = int(raw_input("Which ROI would you like to analyse?\n>>> "))
-    i = range(0,50)
+    i = range(0,49)
     c = 1
     
     for number in i:
@@ -138,37 +138,20 @@ if __name__ == "__main__":
         for a in chopped_array:
             for b in a:
                 list_of_runs.append(b)
-                    
-        #plt.imshow(list_of_runs, aspect="auto")
-            
+        
+        d = 0
+        for array in list_of_runs:
+            plt.subplot(len(list_of_runs)+1, 1, d+1)
+            plt.plot(list_of_runs[d])
+            d+=1
+        
+        plt.subplot(len(list_of_runs)+1, 1, len(list_of_runs)+1)
         plt.imshow(list_of_runs, aspect="auto") 
-        folderName = 'C:/Users/robacha/Desktop/corridor/chop/heat'
-        #os.makedirs(folderName)
-        plt.savefig(os.path.join(folderName, 'heatmap_' + str(roiid) + '.jpg'))
+        folderName = 'C:/Users/robacha/Desktop/corridor/chop/figs'
+        plt.savefig(os.path.join(folderName, 'fig_' + str(roiid) + '.jpg'))
         plt.close('all')
-        
         c+=1
-                
-    
-        
-    
-    #plot(sign)
-    
-    
-    
-    #sign = []
-    #
-    #i=0
-    #for array in sign:
-    #    plt.subplot(len(sign)+1, 1, i+1)
-    #    plt.plot(sign[i])
-    #    i+=1
-    #    
-    #plt.subplot(len(sign)+1, 1, i+1) 
-    #plt.imshow(sign, aspect="auto")
-    
-    
-    
+
     
     
     
