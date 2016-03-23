@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Mar 02 10:31:10 2016
-
 @author: robacha
 """
 
@@ -57,7 +56,6 @@ def chop(zvec_resampled, signal, newpositions):
             
             signal_resampled = scipy.signal.resample(signal_cut,25000,p)
             mytest = signal_resampled[0]
-    #        plt.plot(mytest[:,roiid])
         
             sign.append(mytest[:,roiid])
             
@@ -68,13 +66,29 @@ def chop(zvec_resampled, signal, newpositions):
             
             signal_resampled = scipy.signal.resample(signal_cut,25000,p)
             mytest = signal_resampled[0]
-    #        plt.plot(mytest[:,roiid])
         
             sign.append(mytest[:,roiid])
             
     return sign
-    
 
+    
+def chop_without_resampling(zvec_resampled, signal, newpositions):
+    """Cuts the zvec and sample data into pieces fitting one round of the corridor run."""  
+    
+    ncuts = len(newpositions)-1      
+    sign = []
+
+    for cut in range(0, ncuts):
+        
+        if cut == 0:
+            signal_cut = signal[0:newpositions[cut],:]
+            sign.append(signal_cut[:,roiid])
+            
+        else:
+            signal_cut = signal[newpositions[cut]:newpositions[cut+1],:]
+            sign.append(signal_cut[:,roiid])
+            
+    return sign
 
 
 if __name__ == "__main__":
@@ -130,12 +144,12 @@ if __name__ == "__main__":
     for number in i:
         roiid = c
          
-        chopped_array= []
+        chopped_signal= []
         for zvec, signal, positions in zip(zvec_resampled_array, signal_array, positions_array):
-            chopped_array.append(chop(zvec, signal, positions))
+            chopped_signal.append(chop(zvec, signal, positions))
                 
         list_of_runs = []
-        for a in chopped_array:
+        for a in chopped_signal:
             for b in a:
                 list_of_runs.append(b)
         
@@ -147,18 +161,10 @@ if __name__ == "__main__":
         
         plt.subplot(len(list_of_runs)+1, 1, len(list_of_runs)+1)
         plt.imshow(list_of_runs, aspect="auto") 
-        folderName = 'C:/Users/robacha/Desktop/corridor/chop/figs'
+        folderName = 'C:/Users/robacha/Desktop/corridor/chop/figs2'
         plt.savefig(os.path.join(folderName, 'fig_' + str(roiid) + '.jpg'))
         plt.close('all')
         c+=1
 
     
-    
-    
-    ##thematrix = np.zeros(shape=(26000,50))
-    #
-    #thematrix[p,:] = data
-    #plt.plot(z)
-    
-    #fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, figsize=(6,10))
     
